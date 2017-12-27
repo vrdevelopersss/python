@@ -2,4 +2,4 @@
 
 use online [notebook](https://try.jupyter.org/)
 for fast using and testing
-> visit [wiki](bit.ly/gc0d3)
+> visit [wiki](http://bit.ly/gc0d3)
