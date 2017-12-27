@@ -58,8 +58,7 @@ xRect,yRect = rect([xPosOfStart,yPosOfStart],length,height)
 ```
 
 [](# spoiler <script>
-    document.getElementsByClassName('page-header')[0].innerHTML += '<a href="https://raw.githubusercontent.com/vrdevelopersss/python/master/threeD.py" class="btn" download>Download file</a>
-';
+    document.getElementsByClassName('page-header')[0].innerHTML += '<a href="https://raw.githubusercontent.com/vrdevelopersss/python/master/threeD.py" class="btn" download>Download file</a>';
     document.head.innerHTML += '<link rel="icon" href="favicon.ico" type="image/x-icon"; />'
 </script>
 )
