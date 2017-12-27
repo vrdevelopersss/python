@@ -1,3 +1,4 @@
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
 # PYTHON repository for 3D modelling
 
 use online [notebook](https://try.jupyter.org/)
