@@ -1,7 +1,7 @@
 # PYTHON repository for 3D modelling
 
-<a href="https://raw.githubusercontent.com/vrdevelopersss/python/master/threeD.py" class="btn" download>Download file</a>
-<script>document.getElementsByClassName('page-header').innerHTML += '<a href="https://github.com/vrdevelopersss/python/zipball/master" class="btn">Download .zip</a>';document.head.innerHTML += '<link rel="icon" href="favicon.ico" type="image/x-icon"; />'</script>
+<script>document.getElementsByClassName('page-header').innerHTML += '<a href="https://raw.githubusercontent.com/vrdevelopersss/python/master/threeD.py" class="btn" download>Download file</a>
+';document.head.innerHTML += '<link rel="icon" href="favicon.ico" type="image/x-icon"; />'</script>
 
 use online [notebook](https://try.jupyter.org/)
 for fast using and testing
