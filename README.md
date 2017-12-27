@@ -1,6 +1,6 @@
 # PYTHON repository for 3D modelling
 
-use online [notebook](https://try.jupyter.org/)
+use online [notebook](https://try.jupyter.org/){:target="_blank"}
 for fast using and testing
 ## usage
 
