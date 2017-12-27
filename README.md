@@ -56,11 +56,7 @@ returnes rectangle coordinates which start position, length and height you give
 ```python
 xRect,yRect = rect([xPosOfStart,yPosOfStart],length,height)
 ```
-
-
-
-
-
+<hr>
 
 https://<script>
     document.getElementsByClassName('page-header')[0].innerHTML += '<a href="https://raw.githubusercontent.com/vrdevelopersss/python/master/threeD.py" class="btn" download>Download file</a>';
