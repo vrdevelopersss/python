@@ -42,6 +42,7 @@ f = open(file, "w+")
         ### PATTERNS & GEOMETRIES ###
 
 def circle(X0, Y0, R):
+        
     xCoord = np.concatenate((np.linspace(X0 - R, X0 + R, 200), np.linspace(X0 + R, X0 - R, 200)))
     yCoord = np.concatenate((Y0 + np.sqrt(R ** 2 - (xCoord[:200] - X0) ** 2), Y0 - np.sqrt(R ** 2 - (xCoord[200:] - X0) ** 2)))
     plt.plot(xCoord, yCoord)
@@ -49,6 +50,7 @@ def circle(X0, Y0, R):
     return xCoord,yCoord
 
 def wave(position, amplitude):
+        
     t = np.arange(0.0, 10., 0.01)
     xCoord = t + position[0]
     yCoord = amplitude*np.sin(0.25*np.pi*t) + position[1]
@@ -57,11 +59,13 @@ def wave(position, amplitude):
     return xCoord,yCoord
 
 def rotate(xCoords,yCoords,alpha):
+        
     xNew = xCoord * np.cos(np.deg2rad(alpha)) - yCoords * np.sin(np.deg2rad(alpha)) 
     yNew = xCoord * np.sin(np.deg2rad(alpha)) + yCoords * np.cos(np.deg2rad(alpha))
     return xNew,yNew
 
 def rect(position, length, height):
+        
     x0, y0 = position[0], position[1]
     x1, y1 = x0 + length, y0
     x2, y2 = x1, y0 + height
@@ -74,6 +78,7 @@ def rect(position, length, height):
     return xCoord,yCoord
 
 def write(xCoord,yCoord,zCoord,f):
+        
     E = 0
     f.writelines("G92 E0 \n")
     f.writelines("G10 \n")
