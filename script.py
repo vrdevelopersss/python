@@ -21,6 +21,14 @@ E = 10
 # Extrusion Area
 Area = (nozzleD / 2) ** 2 * np.pi # PI * square of Radius (Diameter / 2)
 
+    #####################
+    #    Open File      #
+    #####################
+
+path = str(os.getcwd())
+file = path + '\output.gcode'
+f = open(file, "w+")
+
         ### EXAMPLES ###
 
 # write(xCoordOfDot,yCoordOfDot,zCoordOfDot)
@@ -35,7 +43,7 @@ Area = (nozzleD / 2) ** 2 * np.pi # PI * square of Radius (Diameter / 2)
 
 def circle(X0, Y0, R):
     xCoord = np.concatenate((np.linspace(X0 - R, X0 + R, 200), np.linspace(X0 + R, X0 - R, 200)))
-    yCoord = np.concatenate((Y0 + np.sqrt(R ** 2 - (X[:200] - X0) ** 2), Y0 - np.sqrt(R ** 2 - (X[200:] - X0) ** 2)))
+    yCoord = np.concatenate((Y0 + np.sqrt(R ** 2 - (xCoord[:200] - X0) ** 2), Y0 - np.sqrt(R ** 2 - (xCoord[200:] - X0) ** 2)))
     plt.plot(xCoord, yCoord)
     plt.axis('equal')
     return xCoord,yCoord
@@ -65,26 +73,18 @@ def rect(position, length, height):
     plt.axis('equal')
     return xCoord,yCoord
 
-def write(xCoord,yCoord,zCoord):
+def write(xCoord,yCoord,zCoord,f):
     E = 0
     f.writelines("G92 E0 \n")
     f.writelines("G10 \n")
     f.writelines("G0 X%.5f Y%.5f Z%.5f F%.3f \n" % (xCoord[0],yCoord[0],zCoord,speed))
     f.writelines("G11 \n")
-    for i in range(0, len(X) - 1):
+    for i in range(0, len(xCoord) - 1):
         Distance = np.sqrt((xCoord[i + 1] - xCoord[i]) ** 2 + (yCoord[i + 1] - yCoord[i]) ** 2)
         E = E + (Distance * Area)
         f.writelines("G1 X%.5f Y%.5f Z%.5f E%.5f \n" % (xCoord[i+1], yCoord[i+1],zCoord,E))
 
 def start():
-
-    #####################
-    #    Open File      #
-    #####################
-
-    path = str(os.getcwd())
-    file = path + '\output.gcode'
-    f = open(file, "w+")
 
     #####################
     #    START CODE     #
@@ -96,7 +96,7 @@ def start():
     f.writelines("M82 ; use absolute distances for extrusion\n")
     f.writelines("G28 ; home all axes\n")
     f.writelines("G1 Z10 F5000 ; lift nozzle \n")
-    f.writelines("M109 S%.3f ; set temperature \n" % (Temp_C))
+    f.writelines("M109 S%.3f ; set temperature \n" % (nozzleTemp))
     f.writelines("G92 E0 ; zero the extruded length \n")
     f.writelines("G1 E%.3f ; extrude 10 mm of filament \n " % (E))
     # f.writelines("G4 P10000 ; wait 10 seconds for nozzle length to stabilize\n")
