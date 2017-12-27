@@ -16,7 +16,16 @@ start()
 end()
 ```
 use  **PATTERNS & GEOMETRIES** 
+> for example
 
+```python
+import threeD as td
+
+td.start()
+for i in range(0,5):
+    xCircle,yCircle = td.circle(40,40,30 - i * 5)
+td.end()
+```
 
 > ## functions
 
