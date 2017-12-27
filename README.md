@@ -1,11 +1,5 @@
 # PYTHON repository for 3D modelling
 
-<script>
-    document.getElementsByClassName('page-header').innerHTML += '<a href="https://raw.githubusercontent.com/vrdevelopersss/python/master/threeD.py" class="btn" download>Download file</a>
-';
-    document.head.innerHTML += '<link rel="icon" href="favicon.ico" type="image/x-icon"; />'
-</script>
-
 use online [notebook](https://try.jupyter.org/)
 for fast using and testing
 ## usage
@@ -62,3 +56,10 @@ returnes rectangle coordinates which start position, length and height you give
 ```python
 xRect,yRect = rect([xPosOfStart,yPosOfStart],length,height)
 ```
+
+
+<script>
+    document.getElementsByClassName('page-header')[0].innerHTML += '<a href="https://raw.githubusercontent.com/vrdevelopersss/python/master/threeD.py" class="btn" download>Download file</a>
+';
+    document.head.innerHTML += '<link rel="icon" href="favicon.ico" type="image/x-icon"; />'
+</script>
