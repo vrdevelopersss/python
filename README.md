@@ -1,5 +1,6 @@
-<link rel="icon" href="favicon.ico" type="image/x-icon" />
 # PYTHON repository for 3D modelling
+
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
 
 use online [notebook](https://try.jupyter.org/)
 for fast using and testing
