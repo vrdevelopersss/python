@@ -41,15 +41,15 @@ f = open(file, "w+")
 
         ### PATTERNS & GEOMETRIES ###
 
-def circle(X0, Y0, R):
+def circle(xStart,yStart,radius):
         
-    xCoord = np.concatenate((np.linspace(X0 - R, X0 + R, 200), np.linspace(X0 + R, X0 - R, 200)))
-    yCoord = np.concatenate((Y0 + np.sqrt(R ** 2 - (xCoord[:200] - X0) ** 2), Y0 - np.sqrt(R ** 2 - (xCoord[200:] - X0) ** 2)))
+    xCoord = np.concatenate((np.linspace(xStart - radius,xStart + radius, 200), np.linspace(xStart + radius,xStart - radius, 200)))
+    yCoord = np.concatenate((yStart + np.sqrt(radius ** 2 - (xCoord[:200] - xStart) ** 2),yStart - np.sqrt(radius ** 2 - (xCoord[200:] - xStart) ** 2)))
     plt.plot(xCoord, yCoord)
     plt.axis('equal')
     return xCoord,yCoord
 
-def wave(position, amplitude):
+def wave(position,amplitude):
         
     t = np.arange(0.0, 10., 0.01)
     xCoord = t + position[0]
@@ -58,21 +58,14 @@ def wave(position, amplitude):
     plt.axis('equal')
     return xCoord,yCoord
 
-def rotate(xCoords,yCoords,alpha):
-        
-    xNew = xCoord * np.cos(np.deg2rad(alpha)) - yCoords * np.sin(np.deg2rad(alpha)) 
-    yNew = xCoord * np.sin(np.deg2rad(alpha)) + yCoords * np.cos(np.deg2rad(alpha))
-    return xNew,yNew
-
-def rect(position, length, height):
+def rect(position,length,height):
         
     x0, y0 = position[0], position[1]
     x1, y1 = x0 + length, y0
     x2, y2 = x1, y0 + height
     x3, y3 = x0, y2
-    x4, y4 = x0, y0
-    xCoord = [x0,x1,x2,x3,x4]
-    yCoord = [y0,y1,y2,y3,y4]
+    xCoord = [x0,x1,x2,x3,x0]
+    yCoord = [y0,y1,y2,y3,y0]
     plt.plot(xCoord,yCoord)
     plt.axis('equal')
     return xCoord,yCoord
@@ -89,7 +82,7 @@ def write(xCoord,yCoord,zCoord,f):
         E = E + (Distance * Area)
         f.writelines("G1 X%.5f Y%.5f Z%.5f E%.5f \n" % (xCoord[i+1], yCoord[i+1],zCoord,E))
 
-def start():
+def start(f):
 
     #####################
     #    START CODE     #
@@ -106,8 +99,9 @@ def start():
     f.writelines("G1 E%.3f ; extrude 10 mm of filament \n " % (E))
     # f.writelines("G4 P10000 ; wait 10 seconds for nozzle length to stabilize\n")
     # f.writelines("G1 Z15 F12000 E5 ; move 15 mm up, fast, while extruding 5mm\n")
+    return f
 
-def end():
+def end(f):
 
     ###############################
     #     Default End Commands    #
