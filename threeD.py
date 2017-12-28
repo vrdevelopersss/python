@@ -99,7 +99,6 @@ def start(f):
     f.writelines("G1 E%.3f ; extrude 10 mm of filament \n " % (E))
     # f.writelines("G4 P10000 ; wait 10 seconds for nozzle length to stabilize\n")
     # f.writelines("G1 Z15 F12000 E5 ; move 15 mm up, fast, while extruding 5mm\n")
-    return f
 
 def end(f):
 
