@@ -10,9 +10,9 @@ import threeD as td
 ```
 **start** and calculate, don't forget about **end**
 ```python
-start()
+start(f)
 ...
-end()
+end(f)
 ```
 use  **PATTERNS & GEOMETRIES** 
 > for example
@@ -20,25 +20,25 @@ use  **PATTERNS & GEOMETRIES**
 ```python
 import threeD as td
 
-td.start()
+td.start(f)
 for i in range(0,5):
     xCircle,yCircle = td.circle(40,40,30 - i * 5)
-td.end()
+td.end(f)
 ```
 
 > ## functions
 
 initializes your gcode file ( output.gcode )
 ```python
-start()
+start(f)
 ```
 end of file
 ```python
-end()
+end(f)
 ```
 writes a dot which positions you give
 ```python
-write(xCoordOfDot,yCoordOfDot,zCoordOfDot)
+write(xCoordOfDot,yCoordOfDot,zCoordOfDot,f)
 ```
 returnes circle coordinates which center position and radius you give
 ```python
@@ -47,10 +47,6 @@ xCrc,yCrc = circle(xCoordOfCenter,yCoordOfCenter,radius)
 returnes wave coordinates which start position and amplitude you give
 ```python
 xWave,yWave = wave([xPosOfStart,yPosOfStart],amplitude)
-```
-returnes rotated object which positions and rotate angle you give
-```python
-xRotated,yRotated = rotate([x1,x2],[y1,y2],angle)
 ```
 returnes rectangle coordinates which start position, length and height you give 
 ```python
