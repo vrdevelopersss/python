@@ -2,8 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-        ### VARIABLES ###
-
+import sympy
+import time
+import math
+# Calculating script time
+now = time.time()
 # Diameter of the Nozzle
 nozzleD = 0.5
 # Set Initial X,Y,Z Possition
@@ -13,65 +16,87 @@ speed = 1000
 # Temperature of the Nozzle
 nozzleTemp = 220
 # Number of layers
-layerCount = 39
+layerCount = 3
 # Height of the layer
 layerHeight = nozzleD
 # Initial extrusion
 E = 10
 # Extrusion Area
 Area = (nozzleD / 2) ** 2 * np.pi # PI * square of Radius (Diameter / 2)
+dens = 20
 
-    #####################
-    #    Open File      #
-    #####################
+### GEOMETRIES ###
 
-path = str(os.getcwd())
-file = path + '\output.gcode'
-f = open(file, "w+")
-
-        ### EXAMPLES ###
-
-# write(xCoordOfDot,yCoordOfDot,zCoordOfDot)
-# xCrc,yCrc = circle(xCoordOfCenter,yCoordOfCenter)
-# xWave,yWave = wave([xPosOfStart,yPosOfStart],amplitude)
-# xRotated,yRotated = rotate([x1,x2],[y1,y2],angle)
-# xRect,yRect = rect([xPosOfStart,yPosOfStart],length,height)
-
-########################################### functions
-
-        ### PATTERNS & GEOMETRIES ###
+def rotate(x,y,alpha):
+    xRotated = np.array(x) * np.cos(np.deg2rad(alpha)) - np.array(y) * np.sin(np.deg2rad(alpha))
+    yRotated = np.array(x) * np.sin(np.deg2rad(alpha)) + np.array(y) * np.cos(np.deg2rad(alpha))
+    return xRotated,yRotated
 
 def circle(xStart,yStart,radius):
-        
-    xCoord = np.concatenate((np.linspace(xStart - radius,xStart + radius, 200), np.linspace(xStart + radius,xStart - radius, 200)))
-    yCoord = np.concatenate((yStart + np.sqrt(radius ** 2 - (xCoord[:200] - xStart) ** 2),yStart - np.sqrt(radius ** 2 - (xCoord[200:] - xStart) ** 2)))
-    plt.plot(xCoord, yCoord)
-    plt.axis('equal')
-    return xCoord,yCoord
+    xCoord = np.concatenate((np.linspace(xStart - radius,xStart + radius, dens), np.linspace(xStart + radius,xStart - radius, dens)))
+    yCoord = np.concatenate((yStart + np.sqrt(radius ** 2 - (xCoord[:dens] - xStart) ** 2),yStart - np.sqrt(radius ** 2 - (xCoord[dens:] - xStart) ** 2)))
 
-def wave(position,amplitude):
-        
-    t = np.arange(0.0, 10., 0.01)
-    xCoord = t + position[0]
-    yCoord = amplitude*np.sin(0.25*np.pi*t) + position[1]
-    plt.plot(xCoord,yCoord)
-    plt.axis('equal')
-    return xCoord,yCoord
+def halfCircle(xStart,yStart,radius,length):
+    xCoord = np.concatenate((np.linspace(xStart - radius,xStart + radius, dens), np.linspace(xStart + radius,xStart - radius, dens)))
+    yCoord = np.concatenate((yStart + np.sqrt(radius ** 2 - (xCoord[:dens] - xStart) ** 2),yStart - np.sqrt(radius ** 2 - (xCoord[dens:] - xStart) ** 2)))
 
-def rect(position,length,height):
-        
-    x0, y0 = position[0], position[1]
-    x1, y1 = x0 + length, y0
-    x2, y2 = x1, y0 + height
-    x3, y3 = x0, y2
-    xCoord = [x0,x1,x2,x3,x0]
-    yCoord = [y0,y1,y2,y3,y0]
-    plt.plot(xCoord,yCoord)
+    xUp = []
+    yUp = []
+    xDown = []
+    yDown = []
+    for i in range(len(xCoord)):
+        if yCoord[i] > yStart :
+            yUp.append(yCoord[i])
+            xUp.append(xCoord[i])
+        if yCoord[i] < yStart :
+            yDown.append(yCoord[i] - length)
+            xDown.append(xCoord[i])
+    x = xUp + xDown
+    y = yUp + yDown
+    x.append(x[0])
+    y.append(y[0])
+    plt.plot(x, y)
     plt.axis('equal')
-    return xCoord,yCoord
+    return x,y
 
+def fill(xPoly,yPoly,alpha,d):
+    polyArray = []
+    x,y = rotate(xPoly,yPoly,alpha)
+    for i in range(len(x)):
+        polyArray.append((x[i],y[i]))
+    poly = sympy.Polygon(*polyArray)
+    reverse = False
+    real = 0
+    printed = 0
+    minX = min(x)
+    minY = min(y)
+    maxX = max(x)
+    maxY = max(y)
+    count = (maxY - minY)/d
+    inter = []
+    xFilled = []
+    yFilled = []
+    while printed < count :
+        real += d
+        l = sympy.Line((minX,minY + real),(maxY,minY + real))
+        inter.append(poly.intersection(l))
+        for i in range(len(inter[printed]) - 1) :
+            tempL = sympy.Segment(inter[printed][i],inter[printed][i + 1])
+            if poly.encloses_point(tempL.midpoint) :
+                if reverse :
+                    inter[printed] = np.flip(inter[printed], axis=0)
+                xFilled.append(inter[printed][i][0])
+                xFilled.append(inter[printed][i + 1][0])
+                yFilled.append(inter[printed][i][1])
+                yFilled.append(inter[printed][i + 1][1])
+            reverse = not reverse
+        print(printed)
+        printed += 1
+    xFinal,yFinal = rotate(xFilled,yFilled,-1 * alpha)
+    return xFinal,yFinal
 def write(xCoord,yCoord,zCoord,f):
-        
+    xCoord = np.float64(xCoord)
+    yCoord = np.float64(yCoord)
     E = 0
     f.writelines("G92 E0 \n")
     f.writelines("G10 \n")
@@ -116,4 +141,30 @@ def end(f):
     f.writelines("G90 ; absolute positioning \n")
     f.close()
 
-    #################################################################
+
+
+### MY CODE ###
+
+path = str(os.getcwd())
+file = path + '\circle.gcode'
+# file = path + '/circle.gcode' # uncomment for MAC or LINUX
+f = open(file, "w+")
+
+
+start(f)
+
+
+alpha = 30
+xStart,yStart = halfCircle(100,100,24,37)
+d = 2
+alpha = [0,10,20,30,40,50,60,70,80,90]
+xEnd = []
+yEnd = []
+for k in range(len(alpha)):
+    xEnd,yEnd = polyFill(xStart,yStart,alpha[k],d)
+    write(xEnd,yEnd,0.5*(k + 1),f)
+end(f)
+
+# print the time needed for script executing
+print(math.floor(time.time() - now))
+
